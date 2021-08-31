@@ -83,28 +83,6 @@ private:
     {
         endwin(); // end curses mode. Failure to do so will result in weird terminal behaviour.
     }
-
-public:
-    Game(int w = 20, int h = 10)
-    {
-        numberOfLanes = h;
-        width = w;
-        for (int i = 0; i < numberOfLanes; i++)
-        {
-            map.push_back(new Lane(width));
-        }
-        player = new Player(width);
-        srand(time(NULL));
-        InitGraphics();
-    }
-    ~Game()
-    {
-        delete player;
-        for (Lane *laneptr : map)
-        {
-            delete laneptr;
-        }
-    }
     void Draw()
     {
         clear(); // clear screen
@@ -166,6 +144,38 @@ public:
             map[rand() % numberOfLanes]->ChangeDirection();
         }
     }
+    void ShowGameOver()
+    {
+        addstr("\nGAME OVER. Press ENTER to quit.");
+        refresh();
+        timeout(-1); // block indefinitely until user presses key.
+        int current;
+        do
+        {
+            current = getch();
+        } while (current != '\n'); // KEY_ENTER unreliable...
+    }
+
+public:
+    Game(int w = 20, int h = 10)
+    {
+        numberOfLanes = h;
+        width = w;
+        for (int i = 0; i < numberOfLanes; i++)
+        {
+            map.push_back(new Lane(width));
+        }
+        player = new Player(width);
+        srand(time(NULL));
+        InitGraphics();
+    }
+    ~Game()
+    {
+        delete player;
+        for (Lane *laneptr : map)
+            delete laneptr;
+        TearDownGraphics();
+    }
     void Run()
     {
         while (!quit)
@@ -174,13 +184,7 @@ public:
             Draw();
             Logic();
         }
-
-        addstr("\nGAME OVER.");
-        refresh();
-    }
-    void Stop()
-    {
-        TearDownGraphics();
+        ShowGameOver();
     }
 };
 
@@ -190,6 +194,4 @@ int main()
     int height = 15; // number of lanes
     Game game(width, height);
     game.Run();
-    getchar();   // let the user see the end result.
-    game.Stop(); // Clean-up of curses.
 }
