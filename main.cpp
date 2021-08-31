@@ -96,7 +96,7 @@ public:
                     // can start and finish on an empty lane.
                     addch('#');
                 else if (player->x == j && player->y == i)
-                    addch('V'); // print player
+                    addch('o'); // print player
                 else
                     addch(' ');
             }
