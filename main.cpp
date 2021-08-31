@@ -76,6 +76,8 @@ private:
         keypad(stdscr, TRUE); // enable arrow keys
         scrollok(stdscr, TRUE);
         nodelay(stdscr, TRUE); // non-blocking getchar for user input
+        start_color();
+        init_pair(1, COLOR_CYAN, COLOR_BLACK); // define character's color (foreground, background)
     }
     void TearDownGraphics()
     {
@@ -115,9 +117,13 @@ public:
                 if (map[i]->CarExists(j) && i != 0 && i != numberOfLanes - 1)
                     // print car, but ignore first and last lanes so the player
                     // can start and finish on an empty lane.
-                    addch('#');
+                    addch('~');
                 else if (player->x == j && player->y == i)
-                    addch('o'); // print player
+                {
+                    attron(COLOR_PAIR(1));
+                    addch('@'); // print player
+                    attroff(COLOR_PAIR(1));
+                }
                 else
                     addch(' ');
             }
@@ -181,7 +187,7 @@ public:
 int main()
 {
     int width = 50;  // size of lanes
-    int height = 5; // number of lanes
+    int height = 15; // number of lanes
     Game game(width, height);
     game.Run();
     getchar();   // let the user see the end result.
