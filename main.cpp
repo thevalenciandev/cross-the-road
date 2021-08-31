@@ -82,6 +82,14 @@ public:
         srand(time(NULL));
         InitGraphics();
     }
+    ~Game()
+    {
+        delete player;
+        for (Lane* laneptr : map)
+        {
+            delete laneptr;
+        }
+    }
     void Draw()
     {
         clear(); // clear screen
