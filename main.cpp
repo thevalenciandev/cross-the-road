@@ -53,10 +53,8 @@ public:
             cars.pop_front(); // remove front car, so the lane stays constant in size.
         }
     }
-    bool CarExists(int pos)
-    {
-        return cars[pos];
-    }
+    bool CarExists(int pos) { return cars[pos]; }
+    void ChangeDirection() { moveRight = !moveRight; }
 };
 
 class Game
@@ -154,11 +152,12 @@ public:
                 map[i]->Move(); // move lane.
             if (player->y == i && map[i]->CarExists(player->x))
                 quit = true; // if there is a hit, stop.
-            if (player->y == numberOfLanes - 1)
-            {
-                score++;
-                player->y = 0; // return to the top
-            }
+        }
+        if (player->y == numberOfLanes - 1)
+        {
+            score++;
+            player->y = 0; // return to the top
+            map[rand() % numberOfLanes]->ChangeDirection();
         }
     }
     void Run()
@@ -182,7 +181,7 @@ public:
 int main()
 {
     int width = 50;  // size of lanes
-    int height = 15; // 5 lanes
+    int height = 5; // number of lanes
     Game game(width, height);
     game.Run();
     getchar();   // let the user see the end result.
