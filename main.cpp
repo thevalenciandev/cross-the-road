@@ -21,6 +21,8 @@ class Lane
 {
 private:
     deque<bool> cars; // Series of "dots": if true there is a car in there, else nothing is there
+    bool moveRight;
+
 public:
     Lane(int width)
     {
@@ -28,15 +30,28 @@ public:
         {
             cars.push_front(false); // no cars in the lane, to start with.
         }
+        moveRight = rand() % 2;
     }
     void Move()
     {
-        if (rand() % 10 == 1) // randomly create cars.
-            cars.push_front(true);
-        else
-            cars.push_front(false);
+        if (moveRight)
+        {
+            if (rand() % 10 == 1) // randomly create cars.
+                cars.push_front(true);
+            else
+                cars.push_front(false);
 
-        cars.pop_back(); // remove last car, so the lane stays constant in size.
+            cars.pop_back(); // remove last car, so the lane stays constant in size.
+        }
+        else
+        {
+            if (rand() % 10 == 1) // randomly create cars.
+                cars.push_back(true);
+            else
+                cars.push_back(false);
+
+            cars.pop_front(); // remove front car, so the lane stays constant in size.
+        }
     }
     bool CarExists(int pos)
     {
@@ -85,7 +100,7 @@ public:
     ~Game()
     {
         delete player;
-        for (Lane* laneptr : map)
+        for (Lane *laneptr : map)
         {
             delete laneptr;
         }
@@ -166,7 +181,6 @@ public:
 
 int main()
 {
-
     int width = 50;  // size of lanes
     int height = 15; // 5 lanes
     Game game(width, height);
