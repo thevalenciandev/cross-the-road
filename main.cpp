@@ -85,7 +85,7 @@ private:
     }
     void Draw()
     {
-        clear(); // clear screen
+        move(0, 0); // move cursor to beginning
         for (int i = 0; i < numberOfLanes; i++)
         {
             for (int j = 0; j < width; j++)
@@ -111,7 +111,7 @@ private:
         printw("Score: %d", score);
         attroff(A_BOLD);
         refresh(); // Actual print on the screen.
-        napms(50);
+        napms(25);
     }
     void Input()
     {
@@ -190,8 +190,8 @@ public:
 
 int main()
 {
-    int width = 50;  // size of lanes
-    int height = 15; // number of lanes
+    int width = 100;  // size of lanes
+    int height = 30; // number of lanes
     Game game(width, height);
     game.Run();
 }
